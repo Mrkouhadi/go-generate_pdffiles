@@ -62,6 +62,14 @@ func BuildHeader(m pdf.Maroto) { // this header has 2 rows, and 1st row has an i
 
 // build content
 func buildFruitList(m pdf.Maroto) {
+
+	tableHead := []string{"fruit", "Description", "amount", "price"}
+	dummyData := [][]string{{"apples", "fresh fruits of the best of the best", "5 kg", "3 usd"}, {"apples", "fresh fruits of the best of the best", "5 kg", "3 usd"}, {"apples", "fresh fruits of the best of the best", "5 kg", "3 usd"}, {"apples", "fresh fruits of the best of the best", "5 kg", "3 usd"}}
+
+	// tableHead := []string{"fruit", "amount", "price"}
+	// dummyData := [][]string{{"apples", "5 kg", "3 usd"}, {"strawberries", "9 kg", "3 usd"}, {"melon", "3 kg", "9 usd"}, {"bananas", "1 kg", "2 usd"}, {"pears", "3 kg", "3 usd"}, {"lemon", "12 kg", "4 usd"}}
+
+	lightBlur := getlightBlur()
 	m.SetBackgroundColor(getTealColor())
 	m.Row(10, func() {
 		m.Col(12, func() {
@@ -74,6 +82,21 @@ func buildFruitList(m pdf.Maroto) {
 				Align:  consts.Center,
 			})
 		})
+	})
+	m.SetBackgroundColor(color.NewWhite())
+	m.TableList(tableHead, dummyData, props.TableList{
+		HeaderProp: props.TableListContent{
+			Size:      9,
+			GridSizes: []uint{2, 6, 2, 2}, // = 12 is the column size, so the grid is dvided by col width
+		},
+		ContentProp: props.TableListContent{
+			Size:      9,
+			GridSizes: []uint{2, 6, 2, 2}, // if there are only 3 cols in table, we'd have {3,6, 3} or sth..
+		},
+		Align:                consts.Left,
+		HeaderContentSpace:   1,
+		Line:                 false, // no lines between rows
+		AlternatedBackground: &lightBlur,
 	})
 }
 
@@ -90,6 +113,13 @@ func getTealColor() color.Color {
 		Red:   3,
 		Green: 166,
 		Blue:  166,
+	}
+}
+func getlightBlur() color.Color {
+	return color.Color{
+		Red:   210,
+		Green: 200,
+		Blue:  230,
 	}
 }
 func HandleError(msg string, err any) {
